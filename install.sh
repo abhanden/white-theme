@@ -1,42 +1,31 @@
 #!/bin/bash
 
-# install.sh for Eymen's dotfiles
-# sets up nvim/lazyvim, waybar, waypaper, hypr configs
+echo "Installing white-theme dotfiles..."
 
-DOTFILES="$HOME/dotfiles"
-CONFIG="$HOME/.config"
+# --- nvim ---
+mkdir -p ~/.config/nvim
+if [ -f ~/.config/nvim/init.lua ]; then
+    mv ~/.config/nvim/init.lua ~/.config/nvim/init.lua.bak
+    echo "Backed up old nvim init.lua"
+fi
+ln -sf "$(pwd)/init.lua" ~/.config/nvim/init.lua
 
-echo "starting dotfiles installation..."
-
-backup_and_link() {
-    local src="$1"
-    local dest="$2"
-
-    if [ -e "$dest" ]; then
-        echo "backing up existing $dest -> $dest.bak"
-        mv "$dest" "$dest.bak"
+# --- waybar ---
+mkdir -p ~/.config/waybar
+for file in config.jsonc style.css; do
+    if [ -f ~/.config/waybar/$file ]; then
+        mv ~/.config/waybar/$file ~/.config/waybar/${file}.bak
+        echo "Backed up old $file"
     fi
+    ln -sf "$(pwd)/$file" ~/.config/waybar/$file
+done
 
-    echo "linking $src -> $dest"
-    ln -s "$src" "$dest"
-}
-
-mkdir -p "$CONFIG"
-
-# nvim / lazyvim
-echo "setting up nvim / lazyvim..."
-if [ ! -d "$CONFIG/nvim" ]; then
-    mkdir -p "$CONFIG/nvim"
+# --- hyprland ---
+mkdir -p ~/.config/hypr
+if [ -f ~/.config/hypr/hyprland.conf ]; then
+    mv ~/.config/hypr/hyprland.conf ~/.config/hypr/hyprland.conf.bak
+    echo "Backed up old hyprland.conf"
 fi
-backup_and_link "$DOTFILES/nvim" "$CONFIG/nvim"
+ln -sf "$(pwd)/hyprland.conf" ~/.config/hypr/hyprland.conf
 
-# optional: auto-install LazyVim if not present
-if [ ! -d "$CONFIG/nvim/lazy" ]; then
-    echo "LazyVim not found, installing..."
-    git clone --filter=blob:none https://github.com/LazyVim/starter "$CONFIG/nvim/lazy" --branch=main
-fi
-
-# waybar
-echo "setting up waybar..."
-mkdir -p "$CONFIG/waybar"
-backup_an_
+echo "White-theme installed successfully!"
