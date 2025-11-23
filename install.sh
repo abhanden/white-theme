@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # install.sh for Eymen's dotfiles
-# installs nvim/lazyvim, waybar, and related configs
+# sets up nvim/lazyvim, waybar, waypaper, hypr configs
 
 DOTFILES="$HOME/dotfiles"
 CONFIG="$HOME/.config"
@@ -13,7 +13,7 @@ backup_and_link() {
     local dest="$2"
 
     if [ -e "$dest" ]; then
-        echo "backing up existing $dest to $dest.bak"
+        echo "backing up existing $dest -> $dest.bak"
         mv "$dest" "$dest.bak"
     fi
 
@@ -21,21 +21,22 @@ backup_and_link() {
     ln -s "$src" "$dest"
 }
 
-# ensure config directories exist
 mkdir -p "$CONFIG"
 
-# lazyvim / nvim
-mkdir -p "$CONFIG/nvim"
+# nvim / lazyvim
+echo "setting up nvim / lazyvim..."
+if [ ! -d "$CONFIG/nvim" ]; then
+    mkdir -p "$CONFIG/nvim"
+fi
 backup_and_link "$DOTFILES/nvim" "$CONFIG/nvim"
 
-# waybar
-mkdir -p "$CONFIG/waybar"
-backup_and_link "$DOTFILES/waybar" "$CONFIG/waybar"
-
-# optional: waypaper if you want
-if [ -d "$DOTFILES/waypaper" ]; then
-    mkdir -p "$CONFIG/waypaper"
-    backup_and_link "$DOTFILES/waypaper" "$CONFIG/waypaper"
+# optional: auto-install LazyVim if not present
+if [ ! -d "$CONFIG/nvim/lazy" ]; then
+    echo "LazyVim not found, installing..."
+    git clone --filter=blob:none https://github.com/LazyVim/starter "$CONFIG/nvim/lazy" --branch=main
 fi
 
-echo "dotfiles installation complete!"
+# waybar
+echo "setting up waybar..."
+mkdir -p "$CONFIG/waybar"
+backup_an_
