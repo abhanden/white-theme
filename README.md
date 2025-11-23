@@ -1,6 +1,6 @@
 ===================================================
                  eymen's dotfiles
-===================================
+=
 
 personal linux configs for wayland and vim setups.
 mainly includes waybar, hyprland, lazyvim and some scripts i use to keep my workflow smooth.
