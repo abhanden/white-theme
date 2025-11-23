@@ -27,3 +27,7 @@ git clone https://github.com/eymen/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 chmod +x install.sh
 ./install.sh
+
+
+```contributing
+this is my personal setup. you can fork the repo, open issues, or suggest improvements. contributions should be minimal, practical, and keep configs readable
